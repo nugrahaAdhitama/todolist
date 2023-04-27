@@ -40,6 +40,8 @@ document.getElementById('todo-list').addEventListener('click', function(event) {
         toggleTodoItem(event.target.parentElement);
     } else if (event.target.className === 'delete-btn') {
         deleteTodoItem(event.target.parentElement);
+    } else if (event.target.className === 'todo-text') {
+        makeEditable(event);
     }
 })
 
@@ -50,4 +52,44 @@ function toggleTodoItem(todoItem) {
 
 function deleteTodoItem(todoItem) {
     todoItem.remove();
+}
+
+function makeEditable(event) {
+    const todoTextElement = event.target;
+    const todoItem = todoTextElement.parentElement;
+    const input = document.createElement('input');
+
+    input.type = 'text';
+    input.value = todoTextElement.textContent;
+    input.className = "todo-edit-input";
+    input.addEventListener("blur", saveChanges);
+    input.addEventListener("keydown", handleKeyDown);
+
+    todoItem.replaceChild(input, todoTextElement);
+    input.select();
+}
+
+function saveChanges(event) {
+    const input = event.target;
+    const todoItem = input.parentElement;
+    const newText = input.value;
+
+    const newTodoTextElement = document.createElement("span");
+    newTodoTextElement.textContent = newText;
+    newTodoTextElement.className = "todo-text";
+    newTodoTextElement.addEventListener("click", makeEditable);
+
+    todoItem.replaceChild(newTodoTextElement, input);
+}
+
+function handleKeyDown(event) {
+    const input = event.target;
+
+    if (event.key === "Enter") {
+        input.blur();
+    } else if (event.key === "Escape") {
+        const todoTextElement = input.parentElement.querySelector(".todo-text");
+        input.value = todoTextElement.textContent;
+        input.blur();
+    }
 }
