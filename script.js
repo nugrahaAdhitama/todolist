@@ -24,9 +24,14 @@ function addNewTodo() {
         deleteButton.textContent = 'Hapus';
         deleteButton.className = 'delete-btn';
 
+        let editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'edit-btn';
+
         newTodoItem.appendChild(todoTextElement);
         newTodoItem.appendChild(completeButton);
         newTodoItem.appendChild(deleteButton);
+        newTodoItem.appendChild(editButton);
 
         let todoList = document.getElementById('todo-list');
         todoList.appendChild(newTodoItem);
@@ -40,8 +45,8 @@ document.getElementById('todo-list').addEventListener('click', function(event) {
         toggleTodoItem(event.target.parentElement);
     } else if (event.target.className === 'delete-btn') {
         deleteTodoItem(event.target.parentElement);
-    } else if (event.target.className === 'todo-text') {
-        makeEditable(event);
+    } else if (event.target.className === 'edit-btn') {
+        makeEditable(event.target.parentElement);
     }
 })
 
@@ -54,9 +59,8 @@ function deleteTodoItem(todoItem) {
     todoItem.remove();
 }
 
-function makeEditable(event) {
-    const todoTextElement = event.target;
-    const todoItem = todoTextElement.parentElement;
+function makeEditable(todoItem) {
+    const todoTextElement = todoItem.querySelector('.todo-text');
     const input = document.createElement('input');
 
     input.type = 'text';
