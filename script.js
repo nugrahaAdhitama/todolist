@@ -4,10 +4,9 @@ document.getElementById('new-todo').addEventListener('keypress', function(event)
     }
 })
 
-function addNewTodo() {
+function addNewTodo(text = null, isCompleted = false, priority = 'priority-low') {
     let todoInput = document.getElementById('new-todo');
-    let todoText = todoInput.value.trim();
-
+    let todoText = text !== null ? text : todoInput.value.trim();
 
     if (todoText !== '') {
         let newTodoItem = document.createElement('div');
@@ -16,6 +15,10 @@ function addNewTodo() {
         const prioritySelector = document.getElementById('priority-selector');
         const priority = prioritySelector.value;
         newTodoItem.classList.add(`priority-${priority}`);
+
+        if (isCompleted) {
+            todoTextElement.classList.add('completed');
+        }
 
         let todoTextElement = document.createElement('span');
         todoTextElement.textContent = todoText;
@@ -43,7 +46,7 @@ function addNewTodo() {
 
         todoInput.value = '';
 
-        saveTodosToLocal();
+        saveToLocalStorage();
     }
 }
 
@@ -61,12 +64,12 @@ function toggleTodoItem(todoItem) {
     let todoTextElement = todoItem.querySelector('span');
     todoTextElement.classList.toggle('completed');
 
-    saveTodosToLocal();
+    saveToLocalStorage();
 }
 
 function deleteTodoItem(todoItem) {
     todoItem.remove();
-    saveTodosToLocal();
+    saveToLocalStorage();
 }
 
 function makeEditable(todoItem) {
@@ -94,7 +97,7 @@ function saveChanges(event) {
     newTodoTextElement.addEventListener("click", makeEditable);
 
     todoItem.replaceChild(newTodoTextElement, input);
-    saveTodosToLocal();
+    saveToLocalStorage();
 }
 
 function handleKeyDown(event) {
@@ -170,13 +173,13 @@ document.getElementById('filter-selector').addEventListener('change', function(e
     filterTodoList(filter);
 })
 
-function saveTodosToLocal() {
+function saveToLocalStorage() {
     const todoList = document.getElementById("todo-list");
     const todoItems = Array.from(todoList.children);
     const todosData = todoItems.map((todoItem) => {
         const todoText = todoItem.querySelector(".todo-text").textContent;
         const completed = todoItem.querySelector(".completed") !== null;
-        const priority = todoItem.className;
+        const priority = todoItem.classList.contains('priority-high') ? 'priority-high' : todoItem.classList.contains('priority-medium') ? 'priority-medium' : 'priority-low';
 
         return {
             text: todoText,
@@ -188,20 +191,18 @@ function saveTodosToLocal() {
     localStorage.setItem("todos", JSON.stringify(todosData));
 }
 
-function loadTodosFromLocal() {
+function loadFromLocalStorage() {
     const todosData = JSON.parse(localStorage.getItem("todos"));
 
     if (todosData) {
         for (const todoData of todosData) {
-            const newTodoItem = createTodoItem(
+            addNewTodo(
                 todoData.text,
                 todoData.isCompleted,
                 todoData.priority
             );
-            const todoList = document.getElementById("todo-list");
-            todoList.appendChild(newTodoItem);
         }
     }
 }
 
-document.addEventListener("DOMContentLoaded", loadTodosFromLocal);
+document.addEventListener("DOMContentLoaded", loadFromLocalStorage);
