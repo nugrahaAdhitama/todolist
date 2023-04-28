@@ -8,9 +8,14 @@ function addNewTodo() {
     let todoInput = document.getElementById('new-todo');
     let todoText = todoInput.value.trim();
 
+
     if (todoText !== '') {
         let newTodoItem = document.createElement('div');
         newTodoItem.className = 'todo-item';
+
+        const prioritySelector = document.getElementById('priority-selector');
+        const priority = prioritySelector.value;
+        newTodoItem.classList.add(`priority-${priority}`);
 
         let todoTextElement = document.createElement('span');
         todoTextElement.textContent = todoText;
@@ -97,3 +102,44 @@ function handleKeyDown(event) {
         input.blur();
     }
 }
+
+function sortTodoList(sortOrder) {
+    const todoList = document.getElementById('todo-list');
+    const todoItems = Array.from(todoList.children);
+
+    todoItems.sort(function (a, b) {
+        const priorityA = a.className.split(' ')[1];
+        const priorityB = b.className.split(' ')[2];
+
+        if (priorityA === priorityB) {
+            return 0;
+        }
+
+        if (sortOrder === 'high-to-low') {
+            return priorityA === 'priority-high' || priorityB === 'priority-low' ? -1 : 1;
+        }
+
+        if (sortOrder === 'low-to-high') {
+            return priorityA === 'priority-low' || priorityB === 'priority-high' ? -1 : 1;
+        }
+
+        return 0;
+    })
+
+    todoList.innerHTML - '';
+    for (const item of todoItems) {
+        todoList.appendChild(item);
+    }
+}
+
+document.getElementById('sort-btn').addEventListener('click', function (){
+    const sortOrder = prompt('Pilih urutan prioritas: \n1. high-to-low\n2. low-to-high\nKetik nomor pilihan Anda:');
+
+    if (sortOrder === '1') {
+        sortTodoList('high-to-low');
+    } else if (sortOrder === '2') {
+        sortTodoList('low-to-high');
+    } else {
+        alert('Pilihan tidak valid. Daftar tidak diurutkan');
+    }
+})
