@@ -114,3 +114,53 @@ li:last-child {
 .edit-btn:hover {
   background-color: #005086;
 }
+
+/* Gaya untuk container input dan prioritas */
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Gaya untuk input to-do */
+#new-todo {
+  flex-grow: 1;
+}
+
+/* Gaya untuk elemen select prioritas */
+#priority-selector {
+  font-size: 16px;
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+/* Gaya untuk tombol pengurutan */
+#sort-btn {
+  font-size: 16px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  cursor: pointer;
+}
+
+#sort-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Gaya untuk prioritas to-do */
+.todo-item.priority-low {
+  border-left: 5px solid #00aaff;
+}
+
+.todo-item.priority-medium {
+  border-left: 5px solid #ffaa00;
+}
+
+.todo-item.priority-high {
+  border-left: 5px solid #ff0000;
+}
