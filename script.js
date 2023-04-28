@@ -42,6 +42,8 @@ function addNewTodo() {
         todoList.appendChild(newTodoItem);
 
         todoInput.value = '';
+
+        saveTodosToLocal();
     }
 }
 
@@ -58,10 +60,13 @@ document.getElementById('todo-list').addEventListener('click', function(event) {
 function toggleTodoItem(todoItem) {
     let todoTextElement = todoItem.querySelector('span');
     todoTextElement.classList.toggle('completed');
+
+    saveTodosToLocal();
 }
 
 function deleteTodoItem(todoItem) {
     todoItem.remove();
+    saveTodosToLocal();
 }
 
 function makeEditable(todoItem) {
@@ -89,6 +94,7 @@ function saveChanges(event) {
     newTodoTextElement.addEventListener("click", makeEditable);
 
     todoItem.replaceChild(newTodoTextElement, input);
+    saveTodosToLocal();
 }
 
 function handleKeyDown(event) {
@@ -139,3 +145,63 @@ document.getElementById('sort-btn').addEventListener('click', function (){
         alert('Pilihan tidak valid. Daftar tidak diurutkan');
     }
 })
+
+function filterTodoList(filter) {
+    const todoList = document.getElementById('todo-list');
+    const todoItems = Array.from(todoList.children);
+
+    for (const item of todoItems) {
+        const isCompleted = item.querySelector('span.completed') !== null;
+
+        if (filter === 'all') {
+            item.style.display = 'flex';
+        } else if (filter === 'completed' && isCompleted) {
+            item.style.display = 'flex';
+        } else if (filter === 'uncompleted' && !isCompleted) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    }
+}
+
+document.getElementById('filter-selector').addEventListener('change', function(event) {
+    const filter = event.target.value;
+    filterTodoList(filter);
+})
+
+function saveTodosToLocal() {
+    const todoList = document.getElementById("todo-list");
+    const todoItems = Array.from(todoList.children);
+    const todosData = todoItems.map((todoItem) => {
+        const todoText = todoItem.querySelector(".todo-text").textContent;
+        const completed = todoItem.querySelector(".completed") !== null;
+        const priority = todoItem.className;
+
+        return {
+            text: todoText,
+            isCompleted: completed,
+            priority: priority,
+        };
+    });
+
+    localStorage.setItem("todos", JSON.stringify(todosData));
+}
+
+function loadTodosFromLocal() {
+    const todosData = JSON.parse(localStorage.getItem("todos"));
+
+    if (todosData) {
+        for (const todoData of todosData) {
+            const newTodoItem = createTodoItem(
+                todoData.text,
+                todoData.isCompleted,
+                todoData.priority
+            );
+            const todoList = document.getElementById("todo-list");
+            todoList.appendChild(newTodoItem);
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadTodosFromLocal);
