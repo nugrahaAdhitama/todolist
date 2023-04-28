@@ -139,3 +139,27 @@ document.getElementById('sort-btn').addEventListener('click', function (){
         alert('Pilihan tidak valid. Daftar tidak diurutkan');
     }
 })
+
+function filterTodoList(filter) {
+    const todoList = document.getElementById('todo-list');
+    const todoItems = Array.from(todoList.children);
+
+    for (const item of todoItems) {
+        const isCompleted = item.querySelector('span.completed') !== null;
+
+        if (filter === 'all') {
+            item.style.display = 'flex';
+        } else if (filter === 'completed' && isCompleted) {
+            item.style.display = 'flex';
+        } else if (filter === 'uncompleted' && !isCompleted) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    }
+}
+
+document.getElementById('filter-selector').addEventListener('change', function(event) {
+    const filter = event.target.value;
+    filterTodoList(filter);
+})
