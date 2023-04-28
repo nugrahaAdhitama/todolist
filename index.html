@@ -9,7 +9,15 @@
 <body>
     <div class="container">
         <h1>To-Do List</h1>
-        <input type="text" id="new-todo" placeholder="Tambah To-Do baru...">
+        <div class="input-container">
+            <input type="text" id="new-todo" placeholder="Tambah To-Do baru...">
+            <select name="" id="priority-selector">
+                <option value="low">Rendah</option>
+                <option value="medium">Sedang</option>
+                <option value="high">Tinggi</option>
+            </select>
+        </div>
+        <button id="sort-btn">Urutkan Berdasarkan Prioritas</button>
         <ul id="todo-list">
         </ul>
     </div>
