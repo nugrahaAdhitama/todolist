@@ -108,19 +108,15 @@ function sortTodoList(sortOrder) {
     const todoItems = Array.from(todoList.children);
 
     todoItems.sort(function (a, b) {
-        const priorityA = a.className.split(' ')[1];
-        const priorityB = b.className.split(' ')[2];
-
-        if (priorityA === priorityB) {
-            return 0;
-        }
+        const priorityA = a.classList.contains('priority-high') ? 'priority-high' : a.classList.contains('priority-medium') ? 'priority-medium' : 'priority-low';
+        const priorityB = b.classList.contains('priority-high') ? 'priority-high' : b.classList.contains('priority-medium') ? 'priority-medium' : 'priority-low';
 
         if (sortOrder === 'high-to-low') {
-            return priorityA === 'priority-high' || priorityB === 'priority-low' ? -1 : 1;
+            return priorityA === priorityB ? 0 : priorityA === 'priority-high' || priorityB === 'priority-low' ? -1 : 1;
         }
 
         if (sortOrder === 'low-to-high') {
-            return priorityA === 'priority-low' || priorityB === 'priority-high' ? -1 : 1;
+            return priorityA === priorityB ? 0 : priorityA === 'priority-low' || priorityB === 'priority-high' ? -1 : 1;
         }
 
         return 0;
