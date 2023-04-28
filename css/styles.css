@@ -164,3 +164,18 @@ li:last-child {
 .todo-item.priority-high {
   border-left: 5px solid #ff0000;
 }
+
+.filter-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Gaya untuk elemen select filter */
+#filter-selector {
+  font-size: 16px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
